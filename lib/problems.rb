@@ -6,7 +6,18 @@
 #
 # all_vowel_pairs(["goat", "action", "tear", "impromptu", "tired", "europe"])   # => ["action europe", "tear impromptu"]
 def all_vowel_pairs(words)
+    arr = []
+    vowels = ["a", "e", "i", "o", "u"]
 
+    words.each_with_index do |word_1, idx_1|
+        words.each_with_index do |word_2, idx_2|
+            pair = word_1 + " " + word_2
+            if vowels.all?{|vow| pair.include?(vow)} && idx_2 > idx_1
+             arr << pair
+            end 
+        end 
+    end   
+    arr 
 end
 
 
@@ -18,7 +29,12 @@ end
 # composite?(9)     # => true
 # composite?(13)    # => false
 def composite?(num)
-
+    (2...num).each do |factor|
+        if num % factor == 0
+            return true
+        end
+    end 
+    false   
 end
 
 
@@ -32,7 +48,7 @@ end
 # find_bigrams("the theater is empty", ["cy", "em", "ty", "ea", "oo"])  # => ["em", "ty", "ea"]
 # find_bigrams("to the moon and back", ["ck", "oo", "ha", "at"])        # => ["ck", "oo"]
 def find_bigrams(str, bigrams)
-
+    bigrams.select {|bigram| str.include?(bigram) } 
 end
 
 class Hash
@@ -50,7 +66,12 @@ class Hash
     # hash_2.my_select { |k, v| k + 1 == v }      # => {10=>11, 5=>6, 7=>8})
     # hash_2.my_select                            # => {4=>4}
     def my_select(&prc)
-
+        prc ||= Proc.new {|k, v| k == v}
+        hash = {}
+        self.each do |k, v|
+            hash[k] = v if prc.call(k, v)
+        end    
+        hash
     end
 end
 
